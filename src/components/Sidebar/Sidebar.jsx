@@ -3,12 +3,13 @@ import { Moon, Sun } from "lucide-react";
 import Search from "../Search/Search";
 import ContactList from "../ContactList/ContactList";
 
-function Sidebar({contacts, currentContact, onSelectContact, isDark, onToggleTheme}) {
+function Sidebar({ contacts, totalContacts, currentContact, onSelectContact, isDark, onToggleTheme, searchQuery, onSearchChange, onAddContact}) {
     return (
         <aside
             className="
                 flex
-                w-full
+                w-96
+                shrink-0
                 max-w-md
                 flex-col
                 bg-slate-50
@@ -24,7 +25,7 @@ function Sidebar({contacts, currentContact, onSelectContact, isDark, onToggleThe
                     </h1>
 
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {contacts.length} saved
+                        {totalContacts} saved
                     </p>
                 </div>
 
@@ -58,14 +59,27 @@ function Sidebar({contacts, currentContact, onSelectContact, isDark, onToggleThe
 
                     <button
                         type="button"
-                        className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                        onClick={onAddContact}
+                        className="
+                            rounded-lg
+                            bg-blue-600
+                            px-4
+                            py-2
+                            font-medium
+                            text-white
+                            hover:bg-blue-700
+                        "
                     >
                         Add contact
                     </button>
                 </div>
             </header>
 
-            <Search placeholder="Search contacts" />
+            <Search
+                placeholder="Search contacts"
+                value={searchQuery}
+                onChange={onSearchChange}
+            />
 
             <ContactList
                 contacts={contacts}

@@ -1,4 +1,4 @@
-import getInitials from "../../utils/getInitials";
+import Avatar from "../Avatar/Avatar";
 
 function ContactItem({ contact, isActive, onSelect }) {
     return (
@@ -11,35 +11,22 @@ function ContactItem({ contact, isActive, onSelect }) {
                 gap-4
                 rounded-lg
                 p-3
-                ${isActive
-                ? "bg-blue-100 border-l-4 border-blue-600"
-                : "hover:bg-blue-50"
+
+                ${
+                isActive
+                    ? "bg-blue-100 dark:bg-slate-700"
+                    : "hover:bg-blue-50 dark:hover:bg-slate-700"
             }
             `}
         >
-            <div
-                className="
-                    flex
-                    h-12
-                    w-12
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-blue-600
-                    font-bold
-                    text-white
-                "
-            >
-                {getInitials(contact.name)}
-            </div>
+            <Avatar name={contact.name} />
 
             <div className="min-w-0">
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-white">
                     {contact.name}
                 </p>
 
-                <p className="truncate text-sm text-slate-500">
+                <p className="truncate text-sm text-slate-500 dark:text-slate-400">
                     {contact.phone || contact.email}
                 </p>
             </div>

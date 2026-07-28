@@ -1,4 +1,8 @@
-function Search({ placeholder }) {
+function Search({ placeholder, value, onChange }) {
+    function handleChange(event) {
+        onChange(event.target.value);
+    }
+
     return (
         <div className="mb-6">
             <label
@@ -10,8 +14,10 @@ function Search({ placeholder }) {
 
             <input
                 id="search"
-                type="text"
+                type="search"
                 placeholder={placeholder}
+                value={value}
+                onChange={handleChange}
                 autoComplete="off"
                 className="
                     w-full
@@ -27,6 +33,13 @@ function Search({ placeholder }) {
                     focus:border-blue-600
                     focus:ring-2
                     focus:ring-blue-200
+
+                    dark:border-slate-600
+                    dark:bg-slate-700
+                    dark:text-white
+                    dark:placeholder:text-slate-400
+                    dark:focus:border-blue-400
+                    dark:focus:ring-blue-900
                 "
             />
         </div>
