@@ -56,6 +56,27 @@ function App() {
         closeForm();
     }
 
+    function deleteContact() {
+        if (!currentContact) {
+            return;
+        }
+
+        const shouldDelete = window.confirm(
+            `Delete ${currentContact.name}?`
+        );
+
+        if (!shouldDelete) {
+            return;
+        }
+
+        const updatedContacts = contacts.filter(
+            contact => contact.id !== currentContact.id
+        );
+
+        setContacts(updatedContacts);
+        setCurrentContact(updatedContacts[0] || null);
+    }
+
     const filteredContacts = contacts.filter(contact => {
         const query = searchQuery.trim().toLowerCase();
 
@@ -95,6 +116,7 @@ function App() {
                     <Details
                         contact={currentContact}
                         onEdit={openEditForm}
+                        onDelete={deleteContact}
                     />
                 )}
             </div>

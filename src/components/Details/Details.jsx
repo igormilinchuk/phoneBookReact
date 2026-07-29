@@ -1,7 +1,7 @@
 import Avatar from "../Avatar/Avatar";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-function Details({ contact, onEdit }) {
+function Details({ contact, onEdit, onDelete }) {
     if (!contact) {
         return (
             <section
@@ -50,28 +50,55 @@ function Details({ contact, onEdit }) {
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={onEdit}
-                    aria-label="Edit contact"
-                    className="
-            flex
-            h-10
-            w-10
-            items-center
-            justify-center
-            rounded-lg
-            border
-            border-slate-300
-            text-slate-700
-            hover:bg-slate-100
-            dark:border-slate-600
-            dark:text-slate-200
-            dark:hover:bg-slate-800
-        "
-                >
-                    <Pencil size={19} />
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={onEdit}
+                        aria-label="Edit contact"
+                        className="
+                            flex
+                            h-10
+                            w-10
+                            items-center
+                            justify-center
+                            rounded-lg
+                            border
+                            border-slate-300
+                            text-slate-700
+                            hover:bg-slate-100
+
+                            dark:border-slate-600
+                            dark:text-slate-200
+                            dark:hover:bg-slate-800
+                        "
+                    >
+                        <Pencil size={19} />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={onDelete}
+                        aria-label="Delete contact"
+                        className="
+                            flex
+                            h-10
+                            w-10
+                            items-center
+                            justify-center
+                            rounded-lg
+                            border
+                            border-red-300
+                            text-red-600
+                            hover:bg-red-50
+
+                            dark:border-red-800
+                            dark:text-red-400
+                            dark:hover:bg-red-950
+                        "
+                    >
+                        <Trash2 size={19} />
+                    </button>
+                </div>
             </header>
 
             <div
