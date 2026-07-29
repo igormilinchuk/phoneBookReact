@@ -8,6 +8,7 @@ function Sidebar({ contacts, totalContacts, currentContact, onSelectContact, isD
         <aside
             className="
                 flex
+                min-h-0
                 w-96
                 shrink-0
                 max-w-md

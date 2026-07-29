@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Sidebar from "./components/Sidebar/Sidebar";
 import Details from "./components/Details/Details";
@@ -6,12 +6,40 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import contactsData from "./data/contacts.json";
 
 function App() {
-    const [contacts, setContacts] = useState(contactsData);
-    const [currentContact, setCurrentContact] = useState(contactsData[0]);
+    const [contacts, setContacts] = useState(() => {
+
+        const savedContacts =
+            localStorage.getItem("contacts");
+
+        if (savedContacts) {
+            return JSON.parse(savedContacts);
+        }
+
+        return contactsData;
+    });
+
+    const [currentContactId, setCurrentContactId] = useState(null);
+
+    const sortedContacts = [...contacts].sort((a, b) =>
+        a.name.localeCompare(b.name, ["uk", "en"])
+    );
+
+    const currentContact =
+        sortedContacts.find(
+            (contact) => contact.id === currentContactId
+        ) ?? sortedContacts[0] ?? null;
+
     const [isDark, setIsDark] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingContact, setEditingContact] = useState(null);
+
+    useEffect(() => {
+        localStorage.setItem(
+            "contacts",
+            JSON.stringify(contacts)
+        );
+    }, [contacts]);
 
     function toggleTheme() {
         setIsDark(prev => !prev);
@@ -38,21 +66,21 @@ function App() {
 
     function saveContact(contactData) {
         if (editingContact) {
-            setContacts(prevContacts =>
-                prevContacts.map(contact =>
+            setContacts((prevContacts) =>
+                prevContacts.map((contact) =>
                     contact.id === editingContact.id
                         ? contactData
                         : contact
                 )
             );
         } else {
-            setContacts(prevContacts => [
+            setContacts((prevContacts) => [
                 ...prevContacts,
                 contactData
             ]);
         }
 
-        setCurrentContact(contactData);
+        setCurrentContactId(contactData.id);
         closeForm();
     }
 
@@ -61,23 +89,29 @@ function App() {
             return;
         }
 
-        const shouldDelete = window.confirm(
+        const isConfirmed = window.confirm(
             `Delete ${currentContact.name}?`
         );
 
-        if (!shouldDelete) {
+        if (!isConfirmed) {
             return;
         }
 
         const updatedContacts = contacts.filter(
-            contact => contact.id !== currentContact.id
+            (contact) => contact.id !== currentContact.id
+        );
+
+        const sortedUpdatedContacts = [...updatedContacts].sort((a, b) =>
+            a.name.localeCompare(b.name, ["uk", "en"], {
+                sensitivity: "base",
+            })
         );
 
         setContacts(updatedContacts);
-        setCurrentContact(updatedContacts[0] || null);
+        setCurrentContactId(sortedUpdatedContacts[0]?.id ?? null);
     }
 
-    const filteredContacts = contacts.filter(contact => {
+    const filteredContacts = sortedContacts.filter((contact) => {
         const query = searchQuery.trim().toLowerCase();
 
         const name = contact.name?.toLowerCase() || "";
@@ -93,12 +127,27 @@ function App() {
 
     return (
         <main className={isDark ? "dark" : ""}>
-            <div className="flex min-h-screen bg-white dark:bg-slate-900">
+            <div className="h-screen overflow-hidden bg-slate-200 p-4 dark:bg-slate-950">
+                <div
+                    className="
+                        flex
+                        h-full
+                        min-h-0
+                        overflow-hidden
+                        rounded-3xl
+                        bg-white
+                        shadow-xl
+
+                        dark:bg-slate-900
+                    "
+                >
                 <Sidebar
                     contacts={filteredContacts}
                     totalContacts={contacts.length}
                     currentContact={currentContact}
-                    onSelectContact={setCurrentContact}
+                    onSelectContact={(contact) =>
+                        setCurrentContactId(contact.id)
+                    }
                     isDark={isDark}
                     onToggleTheme={toggleTheme}
                     searchQuery={searchQuery}
@@ -119,6 +168,7 @@ function App() {
                         onDelete={deleteContact}
                     />
                 )}
+                </div>
             </div>
         </main>
     );

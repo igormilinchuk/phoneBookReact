@@ -6,7 +6,7 @@ function ContactList({ contacts, currentContact, onSelectContact}) {
 
     return (
         <nav
-            className="min-h-0 flex-1 overflow-y-auto"
+            className="custom-scrollbar min-h-0 flex-1 overflow-y-auto"
             aria-label="Contacts"
         >
             {Object.entries(groupedContacts).map(([letter, letterContacts]) => (
