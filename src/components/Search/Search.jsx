@@ -1,10 +1,12 @@
+import { Search as SearchIcon } from "lucide-react";
+
 function Search({ placeholder, value, onChange }) {
     function handleChange(event) {
         onChange(event.target.value);
     }
 
     return (
-        <div className="mb-6">
+        <div className="mb-4">
             <label
                 htmlFor="search"
                 className="sr-only"
@@ -12,36 +14,56 @@ function Search({ placeholder, value, onChange }) {
                 Search contacts
             </label>
 
-            <input
-                id="search"
-                type="search"
-                placeholder={placeholder}
-                value={value}
-                onChange={handleChange}
-                autoComplete="off"
-                className="
+            <div className="relative">
+                <SearchIcon
+                    size={18}
+                    aria-hidden="true"
+                    className="
+                    pointer-events-none
+                    absolute
+                    left-3.5
+                    top-1/2
+                    -translate-y-1/2
+                    text-slate-400
+
+                    dark:text-slate-500
+                "
+                />
+
+                <input
+                    id="search"
+                    type="search"
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    className="
+                    h-11
                     w-full
-                    rounded-lg
+                    rounded-xl
                     border
-                    border-slate-300
+                    border-slate-200
                     bg-white
-                    px-4
-                    py-3
+                    pl-10
+                    pr-4
+                    text-sm
                     text-slate-900
                     outline-none
+                    transition
                     placeholder:text-slate-400
-                    focus:border-blue-600
+                    focus:border-blue-500
                     focus:ring-2
-                    focus:ring-blue-200
+                    focus:ring-blue-500/15
 
                     dark:border-slate-600
                     dark:bg-slate-700
                     dark:text-white
                     dark:placeholder:text-slate-400
                     dark:focus:border-blue-400
-                    dark:focus:ring-blue-900
+                    dark:focus:ring-blue-400/20
                 "
-            />
+                />
+            </div>
         </div>
     );
 }

@@ -6,27 +6,63 @@ function ContactItem({ contact, isActive, onSelect }) {
             onClick={() => onSelect(contact)}
             className={`
                 flex
+                min-h-[66px]
                 cursor-pointer
                 items-center
-                gap-4
-                rounded-lg
-                p-3
+                gap-3
+                rounded-xl
+                border
+                px-3
+                py-2
+                transition
 
-                ${
+        ${
                 isActive
-                    ? "bg-blue-100 dark:bg-slate-700"
-                    : "hover:bg-blue-50 dark:hover:bg-slate-700"
+                    ? `
+                        border-blue-200
+                        bg-blue-50
+                        
+                        dark:border-slate-600
+                        dark:bg-slate-700
+                `
+                    : `
+                        border-transparent
+                        hover:bg-slate-100
+                        
+                        dark:hover:bg-slate-700
+                `
             }
-            `}
+    `}
         >
-            <Avatar name={contact.name} />
+            <Avatar
+                name={contact.name}
+                isActive={isActive}
+            />
 
             <div className="min-w-0">
-                <p className="font-semibold text-slate-900 dark:text-white">
+                <p
+                    className="
+                        truncate
+                        text-sm
+                        font-semibold
+                        text-slate-900
+
+                        dark:text-white
+                    "
+                >
                     {contact.name}
                 </p>
 
-                <p className="truncate text-sm text-slate-500 dark:text-slate-400">
+                <p
+                    className="
+                        mt-0.5
+                        truncate
+                        text-xs
+                        text-slate-500
+
+                        dark:text-slate-400
+                    "
+                >
                     {contact.phone || contact.email}
                 </p>
             </div>

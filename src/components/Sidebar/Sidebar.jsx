@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react";
+import { Moon, Plus, Sun } from "lucide-react";
 
 import Search from "../Search/Search";
 import ContactList from "../ContactList/ContactList";
@@ -11,21 +11,31 @@ function Sidebar({ contacts, totalContacts, currentContact, onSelectContact, isD
                 min-h-0
                 w-96
                 shrink-0
-                max-w-md
                 flex-col
+                border-r
+                border-slate-200
                 bg-slate-50
-                p-5
+                px-6
+                py-7
 
+                dark:border-slate-700
                 dark:bg-slate-800
-    "
+            "
         >
-            <header className="mb-6 flex items-center justify-between">
+            <header className="mb-5 flex items-start justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    <h1 className="
+                        text-2xl
+                        font-bold
+                        tracking-tight
+                        text-slate-900
+                        
+                        dark:text-white
+                    ">
                         Contacts List
                     </h1>
 
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                         {totalContacts} saved
                     </p>
                 </div>
@@ -62,22 +72,29 @@ function Sidebar({ contacts, totalContacts, currentContact, onSelectContact, isD
                         type="button"
                         onClick={onAddContact}
                         className="
-                            rounded-lg
+                            flex
+                            h-10
+                            items-center
+                            gap-2
+                            rounded-xl
                             bg-blue-600
                             px-4
-                            py-2
+                            text-sm
                             font-medium
                             text-white
+                            shadow-sm
+                            transition
                             hover:bg-blue-700
                         "
                     >
+                        <Plus size={14} strokeWidth={3} />
                         Add contact
                     </button>
                 </div>
             </header>
 
             <Search
-                placeholder="Search contacts"
+                placeholder="Search name, phone, or email"
                 value={searchQuery}
                 onChange={onSearchChange}
             />

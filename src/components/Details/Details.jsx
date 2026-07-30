@@ -1,5 +1,5 @@
 import Avatar from "../Avatar/Avatar";
-import { Pencil, Trash2 } from "lucide-react";
+import formatDate from "../../utils/formatDate";
 
 function Details({ contact, onEdit, onDelete }) {
     if (!contact) {
@@ -7,7 +7,7 @@ function Details({ contact, onEdit, onDelete }) {
             <section
                 className="
                     flex
-                    flex-1
+                    flex-2
                     items-center
                     justify-center
                     bg-white
@@ -27,16 +27,18 @@ function Details({ contact, onEdit, onDelete }) {
             className="
                 flex-1
                 bg-white
-                p-8
+                px-8
+                py-7
 
                 dark:bg-slate-900
             "
         >
-            <header className="mb-8 flex items-center justify-between">
+            <header className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-5">
                     <Avatar
                         name={contact.name}
                         size="large"
+                        isActive
                     />
 
                     <div>
@@ -44,59 +46,62 @@ function Details({ contact, onEdit, onDelete }) {
                             {contact.name}
                         </h1>
 
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                            Contact details
+                        <p
+                            className="
+                                mt-1
+                                text-sm
+                                text-slate-500
+
+                                dark:text-slate-400
+                            "
+                        >
+                            Added {formatDate(contact.created_at)}
                         </p>
                     </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex items-center gap-3">
                     <button
                         type="button"
                         onClick={onEdit}
-                        aria-label="Edit contact"
                         className="
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
                             rounded-lg
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            text-slate-600
+                            transition
                             border
                             border-slate-300
-                            text-slate-700
                             hover:bg-slate-100
 
-                            dark:border-slate-600
-                            dark:text-slate-200
+                            dark:text-slate-300
                             dark:hover:bg-slate-800
                         "
                     >
-                        <Pencil size={19} />
+                        Edit
                     </button>
 
                     <button
                         type="button"
                         onClick={onDelete}
-                        aria-label="Delete contact"
                         className="
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
                             rounded-lg
+                            px-4
+                            py-2
+                            text-sm
+                            font-medium
+                            text-red-600
+                            transition
                             border
                             border-red-300
-                            text-red-600
                             hover:bg-red-50
 
-                            dark:border-red-800
-                            dark:text-red-400
                             dark:hover:bg-red-950
                         "
                     >
-                        <Trash2 size={19} />
+                        Delete
                     </button>
                 </div>
             </header>
@@ -107,37 +112,123 @@ function Details({ contact, onEdit, onDelete }) {
                     rounded-xl
                     border
                     border-slate-200
+                    bg-white
 
                     dark:border-slate-700
                     dark:bg-slate-800
                 "
             >
-                <div className="grid grid-cols-[140px_1fr] border-b border-slate-200 px-7 py-6 dark:border-slate-700">
-                    <span className="font-medium text-slate-500 dark:text-slate-400">
+                <div
+                    className="
+                        grid
+                        grid-cols-[120px_1fr]
+                        items-start
+                        border-b
+                        border-slate-200
+                        px-6
+                        py-5
+
+                        dark:border-slate-700
+                    "
+                >
+                    <span
+                        className="
+                            text-xs
+                            font-semibold
+                            uppercase
+                            tracking-wider
+                            text-slate-400
+
+                            dark:text-slate-500
+                        "
+                    >
                         Phone
                     </span>
 
-                    <span className="text-slate-900 dark:text-white">
-                        {contact.phone || "Not specified"}
+                    <span className="
+                                text-sm
+                                font-[470]
+                                text-slate-900
+                                dark:text-white"
+                    >
+                            {contact.phone || "Not specified"}
                     </span>
                 </div>
 
-                <div className="grid grid-cols-[140px_1fr] border-b border-slate-200 px-7 py-6 dark:border-slate-700">
-                    <span className="font-medium text-slate-500 dark:text-slate-400">
+                <div
+                    className="
+                        grid
+                        grid-cols-[120px_1fr]
+                        items-start
+                        border-b
+                        border-slate-200
+                        px-6
+                        py-5
+
+                        dark:border-slate-700
+                    "
+                >
+                    <span
+                        className="
+                            text-xs
+                            font-semibold
+                            uppercase
+                            tracking-wider
+                            text-slate-400
+
+                            dark:text-slate-500
+                        "
+                    >
                         Email
                     </span>
 
-                    <span className="break-words text-slate-900 dark:text-white">
+                    <span
+                        className="
+                        break-all
+                        text-sm
+                        text-slate-900
+                        font-[470]
+
+                        dark:text-white
+                    "
+                    >
                         {contact.email || "Not specified"}
                     </span>
                 </div>
 
-                <div className="grid grid-cols-[140px_1fr] px-7 py-6">
-                    <span className="font-medium text-slate-500 dark:text-slate-400">
+                <div
+                    className="
+                        grid
+                        grid-cols-[120px_1fr]
+                        items-start
+                        px-6
+                        py-5
+                "
+                >
+                    <span
+                        className="
+                            text-xs
+                            font-semibold
+                            uppercase
+                            tracking-wider
+                            text-slate-400
+
+                            dark:text-slate-500
+                        "
+                    >
                         Note
                     </span>
 
-                    <span className="text-slate-900 dark:text-white">
+                    <span
+                        className="
+                            whitespace-pre-wrap
+                            text-sm
+                            leading-6
+                            text-slate-600
+
+                            dark:text-slate-300
+                        "
+                    >
                         {contact.note || "No note"}
                     </span>
                 </div>

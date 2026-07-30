@@ -127,17 +127,29 @@ function App() {
 
     return (
         <main className={isDark ? "dark" : ""}>
-            <div className="h-screen overflow-hidden bg-slate-200 p-4 dark:bg-slate-950">
+            <div
+                className="
+                    h-screen
+                    overflow-hidden
+                    bg-slate-100
+                    p-4
+
+                    dark:bg-slate-950
+                "
+            >
                 <div
                     className="
                         flex
                         h-full
                         min-h-0
                         overflow-hidden
-                        rounded-3xl
+                        rounded-2xl
+                        border
+                        border-slate-200
                         bg-white
-                        shadow-xl
+                        shadow-sm
 
+                        dark:border-slate-700
                         dark:bg-slate-900
                     "
                 >
