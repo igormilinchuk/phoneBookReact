@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function ContactForm({ contact, onSave, onCancel, onBack }) {
+function ContactForm({ contact, onSave, onCancel }) {
     const [formData, setFormData] = useState({
         name: contact?.name || "",
         phone: contact?.phone || "",
