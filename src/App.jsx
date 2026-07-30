@@ -33,6 +33,7 @@ function App() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingContact, setEditingContact] = useState(null);
+    const [mobileView, setMobileView] = useState("list");
 
     useEffect(() => {
         localStorage.setItem(
@@ -48,6 +49,7 @@ function App() {
     function openCreateForm() {
         setEditingContact(null);
         setIsFormOpen(true);
+        setMobileView("form");
     }
 
     function openEditForm() {
@@ -57,11 +59,22 @@ function App() {
 
         setEditingContact(currentContact);
         setIsFormOpen(true);
+        setMobileView("form");
     }
 
     function closeForm() {
         setIsFormOpen(false);
+
+        setMobileView(
+            editingContact ? "details" : "list"
+        );
+
         setEditingContact(null);
+    }
+
+    function selectContact(contact) {
+        setCurrentContactId(contact.id);
+        setMobileView("details");
     }
 
     function saveContact(contactData) {
@@ -81,7 +94,9 @@ function App() {
         }
 
         setCurrentContactId(contactData.id);
-        closeForm();
+        setIsFormOpen(false);
+        setEditingContact(null);
+        setMobileView("details");
     }
 
     function deleteContact() {
@@ -129,57 +144,90 @@ function App() {
         <main className={isDark ? "dark" : ""}>
             <div
                 className="
-                    h-screen
-                    overflow-hidden
-                    bg-slate-100
-                    p-4
+                flex
+                h-screen
+                items-center
+                justify-center
+                overflow-hidden
+                bg-slate-100
+                p-3
 
-                    dark:bg-slate-950
-                "
+                sm:p-4
+                lg:p-6
+                2xl:p-8
+
+                dark:bg-slate-950
+            "
             >
                 <div
                     className="
-                        flex
-                        h-full
-                        min-h-0
-                        overflow-hidden
-                        rounded-2xl
-                        border
-                        border-slate-200
-                        bg-white
-                        shadow-sm
+                    flex
+                    h-full
+                    min-h-0
+                    w-full
+                    max-w-[1600px]
+                    overflow-hidden
+                    bg-white
+                    rounded-2xl
+                    border
+                    border-slate-200
+                    shadow-sm
 
-                        dark:border-slate-700
-                        dark:bg-slate-900
-                    "
+                    dark:bg-slate-900
+                    dark:sm:border-slate-700
+                "
                 >
-                <Sidebar
-                    contacts={filteredContacts}
-                    totalContacts={contacts.length}
-                    currentContact={currentContact}
-                    onSelectContact={(contact) =>
-                        setCurrentContactId(contact.id)
-                    }
-                    isDark={isDark}
-                    onToggleTheme={toggleTheme}
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    onAddContact={openCreateForm}
-                />
+                    <div
+                        className={`
+                        h-full
+                        w-full
+                        shrink-0
 
-                {isFormOpen ? (
-                    <ContactForm
-                        contact={editingContact}
-                        onSave={saveContact}
-                        onCancel={closeForm}
-                    />
-                ) : (
-                    <Details
-                        contact={currentContact}
-                        onEdit={openEditForm}
-                        onDelete={deleteContact}
-                    />
-                )}
+                        md:block
+                        md:w-auto
+
+                        ${mobileView === "list" ? "block" : "hidden"}
+                    `}
+                    >
+                        <Sidebar
+                            contacts={filteredContacts}
+                            totalContacts={contacts.length}
+                            currentContact={currentContact}
+                            onSelectContact={selectContact}
+                            isDark={isDark}
+                            onToggleTheme={toggleTheme}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
+                            onAddContact={openCreateForm}
+                        />
+                    </div>
+
+                    <div
+                        className={`
+                        h-full
+                        min-w-0
+                        flex-1
+
+                        md:block
+
+                        ${mobileView === "list" ? "hidden" : "block"}
+                    `}
+                    >
+                        {isFormOpen ? (
+                            <ContactForm
+                                contact={editingContact}
+                                onSave={saveContact}
+                                onCancel={closeForm}
+                            />
+                        ) : (
+                            <Details
+                                contact={currentContact}
+                                onEdit={openEditForm}
+                                onDelete={deleteContact}
+                                onBack={() => setMobileView("list")}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </main>

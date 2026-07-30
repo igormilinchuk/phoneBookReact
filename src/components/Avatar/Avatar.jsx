@@ -51,7 +51,7 @@ function Avatar({
     const sizeClasses =
         size === "large"
             ? "h-20 w-20 text-2xl"
-            : "h-10 w-10 text-sm";
+            : "h-11 w-11 text-sm";
 
     const color = getAvatarColor(name);
 

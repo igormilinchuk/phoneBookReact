@@ -6,10 +6,10 @@ function ContactItem({ contact, isActive, onSelect }) {
             onClick={() => onSelect(contact)}
             className={`
                 flex
-                min-h-[66px]
+                min-h-18
                 cursor-pointer
                 items-center
-                gap-3
+                gap-3.5
                 rounded-xl
                 border
                 px-3
@@ -43,7 +43,7 @@ function ContactItem({ contact, isActive, onSelect }) {
                 <p
                     className="
                         truncate
-                        text-sm
+                        text-base
                         font-semibold
                         text-slate-900
 
@@ -57,7 +57,7 @@ function ContactItem({ contact, isActive, onSelect }) {
                     className="
                         mt-0.5
                         truncate
-                        text-xs
+                        text-sm
                         text-slate-500
 
                         dark:text-slate-400
