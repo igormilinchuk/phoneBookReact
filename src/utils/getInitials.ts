@@ -1,4 +1,4 @@
-function getInitials(fullName) {
+function getInitials(fullName: string): string {
     return fullName
         .trim()
         .split(/\s+/)

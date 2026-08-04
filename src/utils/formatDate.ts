@@ -1,4 +1,4 @@
-export default function formatDate(dateString) {
+export default function formatDate(dateString?: string) {
     if (!dateString) {
         return "";
     }

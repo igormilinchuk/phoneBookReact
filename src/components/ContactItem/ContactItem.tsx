@@ -1,6 +1,18 @@
 import Avatar from "../Avatar/Avatar";
 
-function ContactItem({ contact, isActive, onSelect }) {
+import type { Contact } from "../../types/contact";
+
+interface ContactItemProps {
+    contact: Contact;
+    isActive: boolean;
+    onSelect: (contact: Contact) => void;
+}
+
+function ContactItem({
+                         contact,
+                         isActive,
+                         onSelect,
+                     }: ContactItemProps) {
     return (
         <li
             onClick={() => onSelect(contact)}

@@ -3,7 +3,31 @@ import { Moon, Plus, Sun } from "lucide-react";
 import Search from "../Search/Search";
 import ContactList from "../ContactList/ContactList";
 
-function Sidebar({ contacts, totalContacts, currentContact, onSelectContact, isDark, onToggleTheme, searchQuery, onSearchChange, onAddContact}) {
+import type { Contact } from "../../types/contact";
+
+interface SidebarProps {
+    contacts: Contact[];
+    totalContacts: number;
+    currentContact: Contact | null;
+    onSelectContact: (contact: Contact) => void;
+    isDark: boolean;
+    onToggleTheme: () => void;
+    searchQuery: string;
+    onSearchChange: (value: string) => void;
+    onAddContact: () => void;
+}
+
+function Sidebar({
+                     contacts,
+                     totalContacts,
+                     currentContact,
+                     onSelectContact,
+                     isDark,
+                     onToggleTheme,
+                     searchQuery,
+                     onSearchChange,
+                     onAddContact
+                 }: SidebarProps) {
     return (
         <aside
             className="

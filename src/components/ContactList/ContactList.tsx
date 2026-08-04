@@ -1,7 +1,19 @@
 import ContactItem from "../ContactItem/ContactItem";
 import groupContactsByLetter from "../../utils/groupContactsByLetter";
 
-function ContactList({ contacts, currentContact, onSelectContact}) {
+import type { Contact } from "../../types/contact";
+
+interface ContactListProps {
+    contacts: Contact[];
+    currentContact: Contact | null;
+    onSelectContact: (contact: Contact) => void;
+}
+
+function ContactList({
+                         contacts,
+                         currentContact,
+                         onSelectContact
+                     }: ContactListProps) {
     const groupedContacts =
         groupContactsByLetter(contacts);
 

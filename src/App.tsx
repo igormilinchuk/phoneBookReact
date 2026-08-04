@@ -3,22 +3,26 @@ import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Details from "./components/Details/Details";
 import ContactForm from "./components/ContactForm/ContactForm";
+
 import contactsData from "./data/contacts.json";
 
-function App() {
-    const [contacts, setContacts] = useState(() => {
+import type { Contact } from "./types/contact";
 
-        const savedContacts =
-            localStorage.getItem("contacts");
+type MobileView = "list" | "details" | "form";
+
+function App() {
+    const [contacts, setContacts] = useState<Contact[]>(() => {
+        const savedContacts = localStorage.getItem("contacts");
 
         if (savedContacts) {
-            return JSON.parse(savedContacts);
+            return JSON.parse(savedContacts) as Contact[];
         }
 
-        return contactsData;
+        return contactsData as Contact[];
     });
 
-    const [currentContactId, setCurrentContactId] = useState(null);
+    const [currentContactId, setCurrentContactId] =
+        useState<number | null>(null);
 
     const sortedContacts = [...contacts].sort((a, b) =>
         a.name.localeCompare(b.name, ["uk", "en"])
@@ -32,8 +36,10 @@ function App() {
     const [isDark, setIsDark] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingContact, setEditingContact] = useState(null);
-    const [mobileView, setMobileView] = useState("list");
+    const [editingContact, setEditingContact] =
+        useState<Contact | null>(null);
+    const [mobileView, setMobileView] =
+        useState<MobileView>("list");
 
     useEffect(() => {
         localStorage.setItem(
@@ -72,12 +78,12 @@ function App() {
         setEditingContact(null);
     }
 
-    function selectContact(contact) {
+    function selectContact(contact: Contact) {
         setCurrentContactId(contact.id);
         setMobileView("details");
     }
 
-    function saveContact(contactData) {
+    function saveContact(contactData: Contact) {
         if (editingContact) {
             setContacts((prevContacts) =>
                 prevContacts.map((contact) =>
@@ -129,9 +135,9 @@ function App() {
     const filteredContacts = sortedContacts.filter((contact) => {
         const query = searchQuery.trim().toLowerCase();
 
-        const name = contact.name?.toLowerCase() || "";
-        const phone = contact.phone?.toLowerCase() || "";
-        const email = contact.email?.toLowerCase() || "";
+        const name = contact.name.toLowerCase();
+        const phone = contact.phone.toLowerCase();
+        const email = contact.email.toLowerCase();
 
         return (
             name.includes(query) ||
@@ -174,7 +180,7 @@ function App() {
                     shadow-sm
 
                     dark:bg-slate-900
-                    dark:sm:border-slate-700
+                    dark:border-slate-700
                 "
                 >
                     <div

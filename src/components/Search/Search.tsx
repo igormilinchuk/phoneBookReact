@@ -1,7 +1,22 @@
+import type { ChangeEvent } from "react";
+
 import { Search as SearchIcon } from "lucide-react";
 
-function Search({ placeholder, value, onChange }) {
-    function handleChange(event) {
+interface SearchProps {
+    placeholder: string;
+    value: string;
+    onChange: (value: string) => void;
+}
+
+function Search({
+                    placeholder,
+                    value,
+                    onChange,
+                }: SearchProps) {
+
+    function handleChange(
+        event: ChangeEvent<HTMLInputElement>
+    ) {
         onChange(event.target.value);
     }
 

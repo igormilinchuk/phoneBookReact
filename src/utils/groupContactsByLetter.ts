@@ -1,9 +1,14 @@
-function groupContactsByLetter(contacts) {
+import type { Contact } from "../types/contact";
+
+function groupContactsByLetter(
+    contacts: Contact[]
+): Record<string, Contact[]> {
+
     const sortedContacts = [...contacts].sort((a, b) =>
         a.name.localeCompare(b.name)
     );
 
-    const groupedContacts = {};
+    const groupedContacts: Record<string, Contact[]> = {};
 
     sortedContacts.forEach((contact) => {
         const letter = contact.name.charAt(0).toUpperCase();
