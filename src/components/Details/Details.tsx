@@ -3,7 +3,21 @@ import { ArrowLeft } from "lucide-react";
 import Avatar from "../Avatar/Avatar";
 import formatDate from "../../utils/formatDate";
 
-function Details({ contact, onEdit, onDelete, onBack }) {
+import type { Contact } from "../../types/contact";
+
+interface DetailsProps {
+    contact: Contact | null;
+    onEdit: () => void;
+    onDelete: () => void;
+    onBack: () => void;
+}
+
+function Details({
+                     contact,
+                     onEdit,
+                     onDelete,
+                     onBack,
+                 }: DetailsProps) {
     if (!contact) {
         return (
             <section

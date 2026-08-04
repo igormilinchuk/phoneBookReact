@@ -1,6 +1,18 @@
 import getInitials from "../../utils/getInitials";
 
-const avatarColors = [
+interface AvatarColor {
+    activeBg: string;
+    inactiveBg: string;
+    inactiveText: string;
+}
+
+interface AvatarProps {
+    name: string;
+    size?: "small" | "large";
+    isActive?: boolean;
+}
+
+const avatarColors: AvatarColor[] = [
     {
         activeBg: "bg-blue-500",
         inactiveBg: "bg-blue-500/15",
@@ -30,24 +42,27 @@ const avatarColors = [
         activeBg: "bg-cyan-500",
         inactiveBg: "bg-cyan-500/15",
         inactiveText: "text-cyan-600",
-    },
+    }
 ];
 
-function getAvatarColor(name = "") {
+function getAvatarColor(
+    name: string = ""
+): AvatarColor {
     let sum = 0;
 
     for (const letter of name) {
         sum += letter.charCodeAt(0);
     }
 
-    return avatarColors[sum % avatarColors.length];
+    return avatarColors[sum % avatarColors.length]!;
 }
 
 function Avatar({
                     name,
                     size = "small",
                     isActive = false,
-                }) {
+                }: AvatarProps) {
+
     const sizeClasses =
         size === "large"
             ? "h-20 w-20 text-2xl"

@@ -1,23 +1,55 @@
-import { useState } from "react";
+import {
+    useState,
+    type ChangeEvent,
+    type FormEvent,
+} from "react";
 
-function ContactForm({ contact, onSave, onCancel }) {
-    const [formData, setFormData] = useState({
-        name: contact?.name || "",
-        phone: contact?.phone || "",
-        email: contact?.email || "",
-        note: contact?.note || ""
-    });
+import type { Contact } from "../../types/contact";
 
-    function handleChange(event) {
+interface ContactFormProps {
+    contact: Contact | null;
+    onSave: (contact: Contact) => void;
+    onCancel: () => void;
+}
+
+interface ContactFormData {
+    name: string;
+    phone: string;
+    email: string;
+    note: string;
+}
+
+function ContactForm({
+                         contact,
+                         onSave,
+                         onCancel,
+                     }: ContactFormProps) {
+    const [formData, setFormData] =
+        useState<ContactFormData>({
+            name: contact?.name ?? "",
+            phone: contact?.phone ?? "",
+            email: contact?.email ?? "",
+            note: contact?.note ?? "",
+        });
+
+    function handleChange(
+        event: ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement
+        >
+    ) {
         const { name, value } = event.target;
 
-        setFormData(prevFormData => ({
+        const field = name as keyof ContactFormData;
+
+        setFormData((prevFormData) => ({
             ...prevFormData,
-            [name]: value
+            [field]: value,
         }));
     }
 
-    function handleSubmit(event) {
+    function handleSubmit(
+        event: FormEvent<HTMLFormElement>
+    ) {
         event.preventDefault();
 
         const trimmedName = formData.name.trim();
@@ -26,13 +58,15 @@ function ContactForm({ contact, onSave, onCancel }) {
             return;
         }
 
-        const savedContact = {
+        const savedContact: Contact = {
             id: contact?.id ?? Date.now(),
             name: trimmedName,
             phone: formData.phone.trim(),
             email: formData.email.trim(),
             note: formData.note.trim(),
-            created_at: contact?.created_at ?? new Date().toISOString()
+            created_at:
+                contact?.created_at ??
+                new Date().toISOString(),
         };
 
         onSave(savedContact);
