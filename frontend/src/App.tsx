@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Sidebar from "./components/Sidebar/Sidebar";
 import Details from "./components/Details/Details";
@@ -6,9 +6,17 @@ import ContactForm from "./components/ContactForm/ContactForm";
 
 import { useContactsQuery } from "./hooks/useContactsQuery";
 
+import { Toaster } from "@/components/ui/sonner";
+
 function App() {
-    const [isDark, setIsDark] =
-        useState(false);
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        document.documentElement.classList.toggle(
+            "dark",
+            isDark
+        );
+    }, [isDark]);
 
     const {
         contacts,
@@ -24,7 +32,6 @@ function App() {
         error,
         isSaving,
         isDeleting,
-        mutationError,
 
         setSearchQuery,
         setMobileView,
@@ -44,7 +51,7 @@ function App() {
 
     if (isLoading) {
         return (
-            <main className={isDark ? "dark" : ""}>
+            <main>
                 <div className="
                 flex
                 h-screen
@@ -64,7 +71,7 @@ function App() {
 
     if (isError) {
         return (
-            <main className={isDark ? "dark" : ""}>
+            <main>
                 <div className="
                 flex
                 h-screen
@@ -121,25 +128,6 @@ function App() {
                     dark:border-slate-700
                 "
                 >
-                    {mutationError instanceof Error && (
-                        <div
-                            className="
-                            border-b
-                            border-red-200
-                            bg-red-50
-                            px-4
-                            py-3
-                            text-sm
-                            text-red-700
-
-                            dark:border-red-900
-                            dark:bg-red-950
-                            dark:text-red-300
-                        "
-                        >
-                            {mutationError.message}
-                        </div>
-                    )}
 
                     <div
                         className={`
@@ -196,6 +184,7 @@ function App() {
                     </div>
                 </div>
             </div>
+            <Toaster />
         </main>
     );
 }

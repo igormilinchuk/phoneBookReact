@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import { toast } from "sonner";
+
 import {
     useMutation,
     useQuery,
@@ -59,6 +61,16 @@ export function useContactsQuery() {
             setIsFormOpen(false);
             setEditingContact(null);
             setMobileView("details");
+
+            toast.success("Contact created");
+        },
+
+        onError: (error) => {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to create contact"
+            );
         },
     });
 
@@ -74,6 +86,16 @@ export function useContactsQuery() {
             setIsFormOpen(false);
             setEditingContact(null);
             setMobileView("details");
+
+            toast.success("Contact updated");
+        },
+
+        onError: (error) => {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to update contact"
+            );
         },
     });
 
@@ -106,6 +128,16 @@ export function useContactsQuery() {
             await queryClient.invalidateQueries({
                 queryKey: CONTACTS_QUERY_KEY,
             });
+
+            toast.success("Contact deleted");
+        },
+
+        onError: (error) => {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to delete contact"
+            );
         },
     });
 
@@ -213,14 +245,6 @@ export function useContactsQuery() {
             return;
         }
 
-        const isConfirmed = window.confirm(
-            `Delete ${currentContact.name}?`
-        );
-
-        if (!isConfirmed) {
-            return;
-        }
-
         deleteMutation.mutate(currentContact.id);
     }
 
@@ -243,11 +267,6 @@ export function useContactsQuery() {
 
         isDeleting:
         deleteMutation.isPending,
-
-        mutationError:
-            createMutation.error ??
-            updateMutation.error ??
-            deleteMutation.error,
 
         setSearchQuery,
         setMobileView,
