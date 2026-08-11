@@ -10,6 +10,7 @@ interface DetailsProps {
     onEdit: () => void;
     onDelete: () => void;
     onBack: () => void;
+    isDeleting: boolean;
 }
 
 function Details({
@@ -17,6 +18,7 @@ function Details({
                      onEdit,
                      onDelete,
                      onBack,
+                     isDeleting,
                  }: DetailsProps) {
     if (!contact) {
         return (
@@ -152,6 +154,7 @@ function Details({
                     <button
                         type="button"
                         onClick={onEdit}
+                        disabled={isDeleting}
                         className="
                             rounded-lg
                             border
@@ -163,7 +166,10 @@ function Details({
                             text-slate-600
                             transition
                             hover:bg-slate-100
-                        
+
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+
                             dark:border-slate-600
                             dark:text-slate-300
                             dark:hover:bg-slate-800
@@ -175,6 +181,7 @@ function Details({
                     <button
                         type="button"
                         onClick={onDelete}
+                        disabled={isDeleting}
                         className="
                             rounded-lg
                             border
@@ -187,11 +194,14 @@ function Details({
                             transition
                             hover:bg-red-50
 
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+
                             dark:border-red-800
                             dark:hover:bg-red-950
                         "
                     >
-                        Delete
+                        {isDeleting ? "Deleting..." : "Delete"}
                     </button>
                 </div>
             </header>

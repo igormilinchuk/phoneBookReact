@@ -10,6 +10,7 @@ interface ContactFormProps {
     contact: Contact | null;
     onSave: (contact: Contact) => void;
     onCancel: () => void;
+    isSaving: boolean;
 }
 
 interface ContactFormData {
@@ -23,6 +24,7 @@ function ContactForm({
                          contact,
                          onSave,
                          onCancel,
+                         isSaving,
                      }: ContactFormProps) {
     const [formData, setFormData] =
         useState<ContactFormData>({
@@ -332,30 +334,37 @@ function ContactForm({
                     />
                 </div>
 
-                <div className="flex flex-wrap gap-3 pt-1 sm:flex-row">
-                    <button
-                        type="submit"
-                        className="
-                            w-full
-                            rounded-lg
-                            bg-blue-600
-                            px-5
-                            py-2.5
-                            text-sm
-                            font-medium
-                            text-white
-                            transition
-                            hover:bg-blue-700
+                <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="
+                        w-full
+                        rounded-lg
+                        bg-blue-600
+                        px-5
+                        py-2.5
+                        text-sm
+                        font-medium
+                        text-white
+                        transition
+                        hover:bg-blue-700
+                        disabled:cursor-not-allowed
+                        disabled:opacity-60
 
-                            sm:w-auto
-                        "
-                    >
-                        {contact ? "Save changes" : "Save"}
-                    </button>
+                        sm:w-auto
+                    "
+                >
+                    {isSaving
+                        ? "Saving..."
+                        : contact
+                            ? "Save changes"
+                            : "Save"}
+                </button>
 
                     <button
                         type="button"
                         onClick={onCancel}
+                        disabled={isSaving}
                         className="
                             w-full
                             rounded-lg
@@ -371,6 +380,9 @@ function ContactForm({
 
                             sm:w-auto
 
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+
                             dark:border-slate-600
                             dark:text-slate-200
                             dark:hover:bg-slate-800
@@ -378,7 +390,6 @@ function ContactForm({
                     >
                         Cancel
                     </button>
-                </div>
             </form>
         </section>
     );

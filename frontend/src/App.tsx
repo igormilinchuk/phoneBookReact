@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import Sidebar from "./src/components/Sidebar/Sidebar";
-import Details from "./src/components/Details/Details";
-import ContactForm from "./src/components/ContactForm/ContactForm";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Details from "./components/Details/Details";
+import ContactForm from "./components/ContactForm/ContactForm";
 
-import useContacts from "./src/hooks/useContacts";
+import { useContactsQuery } from "./hooks/useContactsQuery";
 
 function App() {
     const [isDark, setIsDark] =
@@ -19,6 +19,13 @@ function App() {
         isFormOpen,
         mobileView,
 
+        isLoading,
+        isError,
+        error,
+        isSaving,
+        isDeleting,
+        mutationError,
+
         setSearchQuery,
         setMobileView,
 
@@ -28,10 +35,53 @@ function App() {
         selectContact,
         saveContact,
         deleteContact,
-    } = useContacts();
+    } = useContactsQuery();
 
     function toggleTheme() {
         setIsDark((prev) => !prev);
+    }
+
+
+    if (isLoading) {
+        return (
+            <main className={isDark ? "dark" : ""}>
+                <div className="
+                flex
+                h-screen
+                items-center
+                justify-center
+                bg-slate-100
+                text-slate-600
+
+                dark:bg-slate-950
+                dark:text-slate-300
+            ">
+                    Loading contacts...
+                </div>
+            </main>
+        );
+    }
+
+    if (isError) {
+        return (
+            <main className={isDark ? "dark" : ""}>
+                <div className="
+                flex
+                h-screen
+                items-center
+                justify-center
+                bg-slate-100
+                text-red-600
+
+                dark:bg-slate-950
+                dark:text-red-400
+            ">
+                    {error instanceof Error
+                        ? error.message
+                        : "Failed to load contacts"}
+                </div>
+            </main>
+        );
     }
 
     return (
@@ -71,6 +121,26 @@ function App() {
                     dark:border-slate-700
                 "
                 >
+                    {mutationError instanceof Error && (
+                        <div
+                            className="
+                            border-b
+                            border-red-200
+                            bg-red-50
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+
+                            dark:border-red-900
+                            dark:bg-red-950
+                            dark:text-red-300
+                        "
+                        >
+                            {mutationError.message}
+                        </div>
+                    )}
+
                     <div
                         className={`
                         h-full
@@ -112,6 +182,7 @@ function App() {
                                 contact={editingContact}
                                 onSave={saveContact}
                                 onCancel={closeForm}
+                                isSaving={isSaving}
                             />
                         ) : (
                             <Details
@@ -119,6 +190,7 @@ function App() {
                                 onEdit={openEditForm}
                                 onDelete={deleteContact}
                                 onBack={() => setMobileView("list")}
+                                isDeleting={isDeleting}
                             />
                         )}
                     </div>
