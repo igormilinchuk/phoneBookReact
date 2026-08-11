@@ -4,12 +4,17 @@ import {
     type FormEvent,
 } from "react";
 
-import type { Contact } from "../../types/contact";
+import type { Contact } from "@/types/contact.ts";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ContactFormProps {
     contact: Contact | null;
     onSave: (contact: Contact) => void;
     onCancel: () => void;
+    isSaving: boolean;
 }
 
 interface ContactFormData {
@@ -23,6 +28,7 @@ function ContactForm({
                          contact,
                          onSave,
                          onCancel,
+                         isSaving,
                      }: ContactFormProps) {
     const [formData, setFormData] =
         useState<ContactFormData>({
@@ -146,7 +152,7 @@ function ContactForm({
                         Name
                     </label>
 
-                    <input
+                    <Input
                         id="contact-name"
                         name="name"
                         type="text"
@@ -154,26 +160,25 @@ function ContactForm({
                         onChange={handleChange}
                         autoComplete="name"
                         className="
-                            w-full
+                            h-auto
                             rounded-lg
-                            border
                             border-slate-300
                             bg-white
                             px-4
                             py-2.5
                             text-base
                             text-slate-900
-                            outline-none
-                            transition
-                            focus:border-blue-600
-                            focus:ring-2
-                            focus:ring-blue-200
+                            shadow-none
+
+                            focus-visible:border-blue-600
+                            focus-visible:ring-2
+                            focus-visible:ring-blue-200
 
                             dark:border-slate-600
                             dark:bg-slate-800
                             dark:text-white
-                            dark:focus:border-blue-500
-                            dark:focus:ring-blue-900
+                            dark:focus-visible:border-blue-500
+                            dark:focus-visible:ring-blue-900
                         "
                     />
                 </div>
@@ -296,18 +301,16 @@ function ContactForm({
                         Note
                     </label>
 
-                    <textarea
+                    <Textarea
                         id="contact-note"
                         name="note"
-                        rows={1}
                         value={formData.note}
                         onChange={handleChange}
+                        rows={1}
                         className="
-                            w-full
                             min-h-11
                             resize-y
                             rounded-lg
-                            border
                             border-slate-300
                             bg-white
                             px-4
@@ -315,69 +318,48 @@ function ContactForm({
                             text-base
                             leading-6
                             text-slate-900
-                            outline-none
-                            transition
-                            focus:border-blue-600
-                            focus:ring-2
-                            focus:ring-blue-200
+                            shadow-none
+
+                            focus-visible:border-blue-600
+                            focus-visible:ring-2
+                            focus-visible:ring-blue-200
 
                             sm:min-h-21
 
                             dark:border-slate-600
                             dark:bg-slate-800
                             dark:text-white
-                            dark:focus:border-blue-500
-                            dark:focus:ring-blue-900
-    "
+                            dark:focus-visible:border-blue-500
+                            dark:focus-visible:ring-blue-900
+                        "
                     />
                 </div>
 
-                <div className="flex flex-wrap gap-3 pt-1 sm:flex-row">
-                    <button
+                <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button
                         type="submit"
-                        className="
-                            w-full
-                            rounded-lg
-                            bg-blue-600
-                            px-5
-                            py-2.5
-                            text-sm
-                            font-medium
-                            text-white
-                            transition
-                            hover:bg-blue-700
-
-                            sm:w-auto
-                        "
+                        variant="save"
+                        size="action"
+                        disabled={isSaving}
+                        className="w-full sm:w-auto"
                     >
-                        {contact ? "Save changes" : "Save"}
-                    </button>
+                        {isSaving
+                            ? "Saving..."
+                            : contact
+                                ? "Save changes"
+                                : "Save"}
+                    </Button>
 
-                    <button
+                    <Button
                         type="button"
+                        variant="cancel"
+                        size="action"
                         onClick={onCancel}
-                        className="
-                            w-full
-                            rounded-lg
-                            border
-                            border-slate-300
-                            px-5
-                            py-2.5
-                            text-sm
-                            font-medium
-                            text-slate-700
-                            transition
-                            hover:bg-slate-100
-
-                            sm:w-auto
-
-                            dark:border-slate-600
-                            dark:text-slate-200
-                            dark:hover:bg-slate-800
-                        "
+                        disabled={isSaving}
+                        className="w-full sm:w-auto"
                     >
                         Cancel
-                    </button>
+                    </Button>
                 </div>
             </form>
         </section>

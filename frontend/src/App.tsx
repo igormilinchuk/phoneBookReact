@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import Sidebar from "./src/components/Sidebar/Sidebar";
-import Details from "./src/components/Details/Details";
-import ContactForm from "./src/components/ContactForm/ContactForm";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Details from "./components/Details/Details";
+import ContactForm from "./components/ContactForm/ContactForm";
 
-import useContacts from "./src/hooks/useContacts";
+import { useContactsQuery } from "./hooks/useContactsQuery";
+
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
-    const [isDark, setIsDark] =
-        useState(false);
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        document.documentElement.classList.toggle(
+            "dark",
+            isDark
+        );
+    }, [isDark]);
 
     const {
         contacts,
@@ -19,6 +27,12 @@ function App() {
         isFormOpen,
         mobileView,
 
+        isLoading,
+        isError,
+        error,
+        isSaving,
+        isDeleting,
+
         setSearchQuery,
         setMobileView,
 
@@ -28,10 +42,53 @@ function App() {
         selectContact,
         saveContact,
         deleteContact,
-    } = useContacts();
+    } = useContactsQuery();
 
     function toggleTheme() {
         setIsDark((prev) => !prev);
+    }
+
+
+    if (isLoading) {
+        return (
+            <main>
+                <div className="
+                flex
+                h-screen
+                items-center
+                justify-center
+                bg-slate-100
+                text-slate-600
+
+                dark:bg-slate-950
+                dark:text-slate-300
+            ">
+                    Loading contacts...
+                </div>
+            </main>
+        );
+    }
+
+    if (isError) {
+        return (
+            <main>
+                <div className="
+                flex
+                h-screen
+                items-center
+                justify-center
+                bg-slate-100
+                text-red-600
+
+                dark:bg-slate-950
+                dark:text-red-400
+            ">
+                    {error instanceof Error
+                        ? error.message
+                        : "Failed to load contacts"}
+                </div>
+            </main>
+        );
     }
 
     return (
@@ -71,6 +128,7 @@ function App() {
                     dark:border-slate-700
                 "
                 >
+
                     <div
                         className={`
                         h-full
@@ -112,6 +170,7 @@ function App() {
                                 contact={editingContact}
                                 onSave={saveContact}
                                 onCancel={closeForm}
+                                isSaving={isSaving}
                             />
                         ) : (
                             <Details
@@ -119,11 +178,13 @@ function App() {
                                 onEdit={openEditForm}
                                 onDelete={deleteContact}
                                 onBack={() => setMobileView("list")}
+                                isDeleting={isDeleting}
                             />
                         )}
                     </div>
                 </div>
             </div>
+            <Toaster />
         </main>
     );
 }

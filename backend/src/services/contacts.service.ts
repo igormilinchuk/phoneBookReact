@@ -1,37 +1,56 @@
-import type { Contact } from "../types/contact.js";
-import type { JsonPlaceholderUser } from "../types/json-placeholder-user.js";
+import { prisma } from "../lib/prisma.js";
 
-const JSON_PLACEHOLDER_USERS_URL =
-    "https://jsonplaceholder.typicode.com/users";
+import type { CreateContactInput } from
+        "../types/create-contact.js";
 
-export async function getContacts(): Promise<Contact[]> {
-    const response = await fetch(
-        JSON_PLACEHOLDER_USERS_URL
-    );
+import type { UpdateContactInput } from
+        "../types/update-contact.js";
 
-    if (!response.ok) {
-        throw new Error(
-            `Failed to fetch contacts: ${response.status}`
-        );
-    }
-
-    const users =
-        await response.json() as JsonPlaceholderUser[];
-
-    return users.map((user) => ({
-        id: user.id,
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
-        note: `${user.company.name}, ${user.address.city}`,
-        created_at: createContactDate(user.id),
-    }));
+export async function getContacts() {
+    return prisma.contact.findMany({
+        orderBy: {
+            name: "asc",
+        },
+    });
 }
 
-function createContactDate(id: number): string {
-    const date = new Date("2026-01-01T00:00:00.000Z");
+export async function getContactById(id: number) {
+    return prisma.contact.findUnique({
+        where: {
+            id,
+        },
+    });
+}
 
-    date.setDate(date.getDate() + id);
+export async function createContact(
+    data: CreateContactInput
+) {
+    return prisma.contact.create({
+        data: {
+            name: data.name,
+            phone: data.phone ?? "",
+            email: data.email ?? "",
+            note: data.note ?? "",
+        },
+    });
+}
 
-    return date.toISOString();
+export async function updateContact(
+    id: number,
+    data: UpdateContactInput
+) {
+    return prisma.contact.update({
+        where: {
+            id,
+        },
+        data,
+    });
+}
+
+export async function deleteContact(id: number) {
+    return prisma.contact.delete({
+        where: {
+            id,
+        },
+    });
 }
