@@ -2,9 +2,9 @@ node_modules
 # Keep environment variables out of version control
 .env
 
-backend/dev.db
-backend/dev.db-journal
-backend/dev.db-wal
-backend/dev.db-shm
+dev.db
+dev.db-journal
+dev.db-wal
+dev.db-shm
 
 /src/generated/prisma
