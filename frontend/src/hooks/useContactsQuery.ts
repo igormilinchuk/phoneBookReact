@@ -11,6 +11,7 @@ import {
 import {
     createContact,
     deleteContact as deleteContactApi,
+    getContactById,
     getContacts,
     updateContact,
 } from "../api/contactsApi";
@@ -34,8 +35,26 @@ export function useContactsQuery() {
         queryFn: getContacts,
     });
 
-    const [currentContactId, setCurrentContactId] =
-        useState<number | null>(null);
+    const [
+        selectedContactId,
+        setSelectedContactId,
+    ] = useState<number | null>(null);
+
+    const currentContactId =
+        selectedContactId ??
+        contacts[0]?.id ??
+        null;
+
+    const {
+        data: currentContact = null,
+        isLoading: isContactLoading,
+        isError: isContactError,
+        error: contactError,
+    } = useQuery({
+        queryKey: ["contacts", currentContactId],
+        queryFn: () => getContactById(currentContactId!),
+        enabled: currentContactId !== null,
+    });
 
     const [searchQuery, setSearchQuery] =
         useState("");
@@ -57,7 +76,7 @@ export function useContactsQuery() {
                 queryKey: CONTACTS_QUERY_KEY,
             });
 
-            setCurrentContactId(createdContact.id);
+            setSelectedContactId(createdContact.id);
             setIsFormOpen(false);
             setEditingContact(null);
             setMobileView("details");
@@ -82,7 +101,7 @@ export function useContactsQuery() {
                 queryKey: CONTACTS_QUERY_KEY,
             });
 
-            setCurrentContactId(updatedContact.id);
+            setSelectedContactId(updatedContact.id);
             setIsFormOpen(false);
             setEditingContact(null);
             setMobileView("details");
@@ -117,7 +136,7 @@ export function useContactsQuery() {
                     )
                 )[0] ?? null;
 
-            setCurrentContactId(
+            setSelectedContactId(
                 nextContact?.id ?? null
             );
 
@@ -155,14 +174,6 @@ export function useContactsQuery() {
         [contacts]
     );
 
-    const currentContact =
-        sortedContacts.find(
-            (contact) =>
-                contact.id === currentContactId
-        ) ??
-        sortedContacts[0] ??
-        null;
-
     const filteredContacts = useMemo(() => {
         const query =
             searchQuery.trim().toLowerCase();
@@ -195,12 +206,8 @@ export function useContactsQuery() {
         setMobileView("form");
     }
 
-    function openEditForm() {
-        if (!currentContact) {
-            return;
-        }
-
-        setEditingContact(currentContact);
+    function openEditForm(contact: Contact) {
+        setEditingContact(contact);
         setIsFormOpen(true);
         setMobileView("form");
     }
@@ -216,7 +223,7 @@ export function useContactsQuery() {
     }
 
     function selectContact(contact: Contact) {
-        setCurrentContactId(contact.id);
+        setSelectedContactId(contact.id);
         setMobileView("details");
     }
 
@@ -240,18 +247,17 @@ export function useContactsQuery() {
         createMutation.mutate(payload);
     }
 
-    function deleteContact() {
-        if (!currentContact) {
-            return;
-        }
-
-        deleteMutation.mutate(currentContact.id);
+    function deleteContact(id: number) {
+        deleteMutation.mutate(id);
     }
 
     return {
         contacts,
         filteredContacts,
+
         currentContact,
+        currentContactId,
+
         editingContact,
         searchQuery,
         isFormOpen,
@@ -260,6 +266,10 @@ export function useContactsQuery() {
         isLoading,
         isError,
         error,
+
+        isContactLoading,
+        isContactError,
+        contactError,
 
         isSaving:
             createMutation.isPending ||

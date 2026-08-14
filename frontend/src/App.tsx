@@ -5,6 +5,7 @@ import Details from "./components/Details/Details";
 import ContactForm from "./components/ContactForm/ContactForm";
 
 import { useContactsQuery } from "./hooks/useContactsQuery";
+import { useContactQuery } from "./hooks/useContactQuery";
 
 import { Toaster } from "@/components/ui/sonner";
 
@@ -21,7 +22,8 @@ function App() {
     const {
         contacts,
         filteredContacts,
-        currentContact,
+        currentContactId,
+
         editingContact,
         searchQuery,
         isFormOpen,
@@ -43,6 +45,13 @@ function App() {
         saveContact,
         deleteContact,
     } = useContactsQuery();
+
+    const {
+        data: currentContact,
+        isLoading: isContactLoading,
+        isError: isContactError,
+        error: contactError,
+    } = useContactQuery(currentContactId);
 
     function toggleTheme() {
         setIsDark((prev) => !prev);
@@ -92,7 +101,7 @@ function App() {
     }
 
     return (
-        <main className={isDark ? "dark" : ""}>
+        <main>
             <div
                 className="
                 flex
@@ -144,7 +153,7 @@ function App() {
                         <Sidebar
                             contacts={filteredContacts}
                             totalContacts={contacts.length}
-                            currentContact={currentContact}
+                            currentContactId={currentContactId}
                             onSelectContact={selectContact}
                             isDark={isDark}
                             onToggleTheme={toggleTheme}
@@ -172,11 +181,29 @@ function App() {
                                 onCancel={closeForm}
                                 isSaving={isSaving}
                             />
+                        ) : isContactLoading ? (
+                            <div className="flex h-full items-center justify-center">
+                                Loading contact...
+                            </div>
+                        ) : isContactError ? (
+                            <div className="flex h-full items-center justify-center text-red-600">
+                                {contactError instanceof Error
+                                    ? contactError.message
+                                    : "Failed to load contact"}
+                            </div>
                         ) : (
                             <Details
-                                contact={currentContact}
-                                onEdit={openEditForm}
-                                onDelete={deleteContact}
+                                contact={currentContact ?? null}
+                                onEdit={() => {
+                                    if (currentContact) {
+                                        openEditForm(currentContact);
+                                    }
+                                }}
+                                onDelete={() => {
+                                    if (currentContact) {
+                                        deleteContact(currentContact.id);
+                                    }
+                                }}
                                 onBack={() => setMobileView("list")}
                                 isDeleting={isDeleting}
                             />
