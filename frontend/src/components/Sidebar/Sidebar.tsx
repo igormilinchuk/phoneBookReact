@@ -3,12 +3,12 @@ import { Moon, Plus, Sun } from "lucide-react";
 import Search from "../Search/Search";
 import ContactList from "../ContactList/ContactList";
 
-import type { Contact } from "../../types/contact";
+import type { Contact } from "@/types/contact.ts";
 
 interface SidebarProps {
     contacts: Contact[];
     totalContacts: number;
-    currentContact: Contact | null;
+    currentContactId: number | null;
     onSelectContact: (contact: Contact) => void;
     isDark: boolean;
     onToggleTheme: () => void;
@@ -20,13 +20,13 @@ interface SidebarProps {
 function Sidebar({
                      contacts,
                      totalContacts,
-                     currentContact,
+                     currentContactId,
                      onSelectContact,
                      isDark,
                      onToggleTheme,
                      searchQuery,
                      onSearchChange,
-                     onAddContact
+                     onAddContact,
                  }: SidebarProps) {
     return (
         <aside
@@ -179,7 +179,7 @@ function Sidebar({
 
             <ContactList
                 contacts={contacts}
-                currentContact={currentContact}
+                currentContactId={currentContactId}
                 onSelectContact={onSelectContact}
             />
         </aside>

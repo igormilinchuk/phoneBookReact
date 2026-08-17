@@ -128,3 +128,22 @@ export async function deleteContact(
         );
     }
 }
+
+export async function getContactById(
+    id: number
+): Promise<Contact> {
+    const response = await fetch(
+        `${CONTACTS_URL}/${id}`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to fetch contact: ${response.status}`
+        );
+    }
+
+    const contact =
+        await response.json() as ApiContact;
+
+    return mapApiContact(contact);
+}

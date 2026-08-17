@@ -1,9 +1,0 @@
--- CreateTable
-CREATE TABLE "Contact" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "phone" TEXT NOT NULL DEFAULT '',
-    "email" TEXT NOT NULL DEFAULT '',
-    "note" TEXT NOT NULL DEFAULT '',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);

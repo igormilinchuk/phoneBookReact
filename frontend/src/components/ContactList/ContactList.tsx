@@ -1,18 +1,18 @@
 import ContactItem from "../ContactItem/ContactItem";
 import groupContactsByLetter from "../../utils/groupContactsByLetter";
 
-import type { Contact } from "../../types/contact";
+import type { Contact } from "@/types/contact.ts";
 
 interface ContactListProps {
     contacts: Contact[];
-    currentContact: Contact | null;
+    currentContactId: number | null;
     onSelectContact: (contact: Contact) => void;
 }
 
 function ContactList({
                          contacts,
-                         currentContact,
-                         onSelectContact
+                         currentContactId,
+                         onSelectContact,
                      }: ContactListProps) {
     const groupedContacts =
         groupContactsByLetter(contacts);
@@ -95,7 +95,7 @@ function ContactList({
                                     key={contact.id}
                                     contact={contact}
                                     isActive={
-                                        contact.id === currentContact?.id
+                                        contact.id === currentContactId
                                     }
                                     onSelect={onSelectContact}
                                 />
