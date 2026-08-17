@@ -1,14 +1,13 @@
 import {
-    integer,
-    sqliteTable,
+    pgTable,
+    serial,
     text,
-} from "drizzle-orm/sqlite-core";
+    timestamp,
+} from "drizzle-orm/pg-core";
 
-export const contacts = sqliteTable("contacts", {
-    id: integer("id")
-        .primaryKey({
-            autoIncrement: true,
-        }),
+export const contacts = pgTable("contacts", {
+    id: serial("id")
+        .primaryKey(),
 
     name: text("name")
         .notNull(),
@@ -25,7 +24,9 @@ export const contacts = sqliteTable("contacts", {
         .notNull()
         .default(""),
 
-    createdAt: text("created_at")
-        .notNull()
-        .$defaultFn(() => new Date().toISOString()),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+    })
+        .defaultNow()
+        .notNull(),
 });
